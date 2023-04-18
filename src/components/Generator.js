@@ -1,20 +1,20 @@
 import React from 'react'
 import Options from './Options' 
+import Stats from './Stats'
 
 export default class Generator extends React.Component {
     state = {
         selected: [true, true, true, true],
-        length: 128
+        passwordLength: 128
     }
-    lengthChange = (length) => {
-        this.setState(() => ({length: length}))
+    lengthChange = (passwordLength) => {
+        this.setState(() => ({passwordLength: passwordLength}))
     }
 
     charPoolChange = (pool) => {
         switch (pool) {
             case 'uppercase':
                 this.setState((prevState) => ({selected: [!prevState.selected[0], prevState.selected[1], prevState.selected[2], prevState.selected[3]]}))
-                console.log('changing uppercase')
                 break
             case 'lowercase':
                 this.setState((prevState) => ({selected: [prevState.selected[0], !prevState.selected[1], prevState.selected[2], prevState.selected[3]]}))
@@ -49,10 +49,11 @@ export default class Generator extends React.Component {
         }
         // console.log(selected.length)
         const arr = selected.split("")
+        console.log(arr)
         let passwords = []
         for (let l = 0; l < 1; l++) {
             let password = []
-            for (let i = 0; i < this.state.length; i++) {
+            for (let i = 0; i < this.state.passwordLength; i++) {
                 password.push(arr[getRandomInt(0, selected.length)])
             }
             passwords.push(password.join(''))
@@ -62,10 +63,12 @@ export default class Generator extends React.Component {
         // console.log(passwords)
         return (
             <div className='container'>
+                <p>{"<b>ahahahsd</b>"}</p>
                 {
                     passwords.map((password) => (<p className='password'>{password}</p>))
                 }
-                <Options charPoolChange={this.charPoolChange} lengthChange={this.lengthChange} selected={this.state.selected}/>
+                <Options passwordLength={this.state.passwordLength} charPoolChange={this.charPoolChange} lengthChange={this.lengthChange} selected={this.state.selected}/>
+                <Stats passwordLength={this.state.passwordLength} pool={selected.length} />
             </div>
         )
         
