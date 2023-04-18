@@ -1,14 +1,30 @@
 import React from 'react'
 import Options from './Options' 
 import Stats from './Stats'
+import Password from './Password'
+
 
 export default class Generator extends React.Component {
     state = {
         selected: [true, true, true, true],
-        passwordLength: 128
+        charPool: 93,
+        passwordLength: 128,
+        password: undefined,
     }
+
+    componentDidMount() {
+        this.regenerate()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.selected != this.state.selected ||  prevState.passwordLength != this.state.passwordLength) {
+            this.regenerate()
+        }
+    }
+
     lengthChange = (passwordLength) => {
         this.setState(() => ({passwordLength: passwordLength}))
+        this.regenerate()
     }
 
     charPoolChange = (pool) => {
@@ -26,10 +42,10 @@ export default class Generator extends React.Component {
                 this.setState((prevState) => ({selected: [prevState.selected[0], prevState.selected[1], prevState.selected[2], !prevState.selected[3]]}))
                 break
             }
-        
+        this.regenerate()
     }
-
-    render() {
+    
+    generate() {
         const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         const lowercase = 'abcdefghijklmnopqrstuvwxyz'
         const num = "0123456789"
@@ -49,26 +65,28 @@ export default class Generator extends React.Component {
         }
         // console.log(selected.length)
         const arr = selected.split("")
-        console.log(arr)
-        let passwords = []
-        for (let l = 0; l < 1; l++) {
-            let password = []
-            for (let i = 0; i < this.state.passwordLength; i++) {
-                password.push(arr[getRandomInt(0, selected.length)])
-            }
-            passwords.push(password.join(''))
-            
+        let password = []
+        for (let i = 0; i < this.state.passwordLength; i++) {
+            password.push(arr[getRandomInt(0, selected.length)])
         }
-        
+
+        this.setState(() => ({charPool: selected.length}))
+
+        return password.join('')
+    }
+
+    regenerate = () => {
+        this.setState(() => ({password: this.generate()}))
+    }
+
+    render() {
+
         // console.log(passwords)
         return (
-            <div className='container'>
-                <p>{"<b>ahahahsd</b>"}</p>
-                {
-                    passwords.map((password) => (<p className='password'>{password}</p>))
-                }
+            <div className='container grid'>
+                <Password password={this.state.password} regenerate={this.regenerate} />
                 <Options passwordLength={this.state.passwordLength} charPoolChange={this.charPoolChange} lengthChange={this.lengthChange} selected={this.state.selected}/>
-                <Stats passwordLength={this.state.passwordLength} pool={selected.length} />
+                <Stats passwordLength={this.state.passwordLength} pool={this.state.charPool} />
             </div>
         )
         

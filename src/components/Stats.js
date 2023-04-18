@@ -48,14 +48,17 @@ const Stats = (props) => {
             }
             return Math.floor(timeInYears.toLocaleString('fullwide', {useGrouping:false})) + ' years'
         }
-        return Math.trunc(timeInEarthLifetimes) + ' earth lifetimes'
+        if (timeInEarthLifetimes < 10000) {
+            return Math.floor(timeInEarthLifetimes) + ' earth lifetimes'
+        }
+        return 'over 10000 earth lifetimes'
         
     }
 
     return (
-        <div>
-            <div>entropy: {calculateEntropy()} bits</div>
-            <p>bruteforce time: {calculateBruteforceTime()}</p>
+        <div className='_stats'>
+            <span className='label'>entropy </span><span className='value'>{calculateEntropy().toFixed(2)} bits</span>
+            <span className='label'>bruteforce time </span><span className='value'>{calculateBruteforceTime()}</span>
         </div>
     )
 }

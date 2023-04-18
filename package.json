@@ -7,6 +7,7 @@
   "scripts": {
     "serve": "live-server public/",
     "build": "webpack",
+    "build:prod": "webpack --config webpack.prod.js",
     "dev-server": "webpack-dev-server"
   },
   "dependencies": {
@@ -20,7 +21,6 @@
     "node-sass": "^8.0.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "sass-loader": "^13.2.2",
     "style-loader": "^3.3.2",
@@ -29,6 +29,7 @@
     "webpack-dev-server": "^4.13.1"
   },
   "devDependencies": {
+    "mini-css-extract-plugin": "^2.7.5",
     "webpack-cli": "^5.0.1"
   }
 }
