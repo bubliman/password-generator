@@ -10,9 +10,9 @@ const Header = (props) => {
 
     return (
         <div className='header'>
-            <a href="/"><h1>password-generator</h1></a>
+            <a href="/password-generator/"><h1>password-generator</h1></a>
             <nav>
-            <a href="/info/">Info</a>
+            <a href="/password-generator/info/">Info</a>
             </nav>
         </div>
     )
