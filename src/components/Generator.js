@@ -8,11 +8,18 @@ export default class Generator extends React.Component {
     state = {
         selected: [true, true, true, true],
         charPool: 93,
-        passwordLength: 128,
+        passwordLength: 12,
         password: undefined,
     }
 
     componentDidMount() {
+        let visited = localStorage["alreadyVisited"];
+        if(visited) {
+
+        } else {
+             localStorage["alreadyVisited"] = true;
+             alert("THIS SYSTEM/SOFTWARE HAS NOT BEEN REVIEWED BY ANY CRYPTOGRAPHIC EXPERT AND IT IS TO BE USED AT YOUR OWN RISK \n \n This warning will persist until I’m sure that this is a secure system.")
+            }
         this.regenerate()
     }
 
@@ -23,7 +30,12 @@ export default class Generator extends React.Component {
     }
 
     lengthChange = (passwordLength) => {
-        this.setState(() => ({passwordLength: passwordLength}))
+        if (passwordLength == "") {
+            this.setState(() => ({passwordLength: 12}))
+        }
+        else {
+            this.setState(() => ({passwordLength: passwordLength}))
+        }
         this.regenerate()
     }
 
@@ -49,25 +61,20 @@ export default class Generator extends React.Component {
         const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         const lowercase = 'abcdefghijklmnopqrstuvwxyz'
         const num = "0123456789"
-        const spec = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}'
+        const special = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}'
         let selected = ""
-        if (this.state.selected[0] == true) {
-            selected += uppercase
-        }
-        if (this.state.selected[1] == true) {
-            selected += lowercase
-        }
-        if (this.state.selected[2] == true) {
-            selected += num
-        }
-        if (this.state.selected[3] == true) {
-            selected += spec
-        }
-        // console.log(selected.length)
+        // create the character pool that was selected by the user
+        selected = this.state.selected[0] == true ? selected + uppercase : selected
+        selected = this.state.selected[1] == true ? selected + lowercase : selected
+        selected = this.state.selected[2] == true ? selected + num : selected
+        selected = this.state.selected[3] == true ? selected + special : selected
+
+        
+        console.log(selected.length)
         const arr = selected.split("")
         let password = []
         for (let i = 0; i < this.state.passwordLength; i++) {
-            password.push(arr[getRandomInt(0, selected.length)])
+            password.push(arr[getRandomInt(0, selected.length - 1)])
         }
 
         this.setState(() => ({charPool: selected.length}))
@@ -81,10 +88,10 @@ export default class Generator extends React.Component {
 
     render() {
 
-        // console.log(passwords)
+        
         return (
             <div className='container grid'>
-                <Password password={this.state.password} regenerate={this.regenerate} />
+                <Password password={this.state.password} regenerate={this.regenerate} passwordLength={this.state.passwordLength} />
                 <Options passwordLength={this.state.passwordLength} charPoolChange={this.charPoolChange} lengthChange={this.lengthChange} selected={this.state.selected}/>
                 <Stats passwordLength={this.state.passwordLength} pool={this.state.charPool} />
             </div>
