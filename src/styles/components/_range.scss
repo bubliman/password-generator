@@ -57,7 +57,7 @@ $ie-bottom-track-color: darken($track-color, $contrast) !default;
     appearance: none;
   -webkit-appearance: none;
   background: transparent;
-  // margin: math.div($thumb-height, 2) 0;
+  margin: math.div($thumb-height, 2) 0;
   width: $track-width;
 
   &::-moz-focus-outer {

@@ -18,11 +18,29 @@ const Stats = (props) => {
         props.regenerate()
 
     }
+    const uppercase = /[A-Z]/
+    const lowercase = /[a-z]/
+    const num = /\d/
+    const special = /[!"#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}]/
     // console.log(props.password != undefined && props.password.length)
     return (
         <div className='_password'>
             <div className='_password_container'>
-                <div className={props.passwordLength > 74 ? '_password_password top' : '_password_password center'} style={{ fontSize: getFontSize(props.passwordLength) }}>{props.password}</div>
+                <div className={props.passwordLength > 74 ? '_password_password top' : '_password_password center'} style={{ fontSize: getFontSize(props.passwordLength) }}>
+                    {props.password?.split('').map((char, index) => {
+                        if (uppercase.test(char)) {
+                        return <span className='_password_span uppercase' key={index}>{char}</span>
+                        } else if (lowercase.test(char)) {
+                        return <span className='_password_span lowercase' key={index}>{char}</span>
+                        } else if (num.test(char)) {
+                        return <span className='_password_span num' key={index}>{char}</span>
+                        } else if (special.test(char)) {
+                        return <span className='_password_span special' key={index}>{char}</span>
+                        } else {
+                        return char
+                        }
+                    })}
+                </div>
                 <div className='_password_button-container'>
                     <button className='_password_regen-button _password_button' type="button" onClick={regenerate} >{iconRefresh}</button>
                     <button className='_password_copy-button _password_button' type='button' onClick={() => {navigator.clipboard.writeText(props.password)}}>{iconCopy}</button>
